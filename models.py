@@ -61,3 +61,7 @@ class Status(db.Model, BaseModel):
         self.text = text
         self.created_at = created_at
 
+    def as_dict(self):
+        epoch = datetime.utcfromtimestamp(0)
+        dict = BaseModel.as_dict(self)
+        dict['created_at'] = int((self.created_at - epoch).total_seconds() * 1000.0)  # millis since 1970
