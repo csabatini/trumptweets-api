@@ -81,11 +81,6 @@ class Tag(db.Model, BaseModel):
         self.tag_id = tag_id
         self.tag = tag
 
-    def as_dict(self):
-        dict = BaseModel.as_dict(self)
-        del dict['tag']
-        return dict
-
 
 class StatusTag(db.Model, BaseModel):
     __tablename__ = 'status_tag'
