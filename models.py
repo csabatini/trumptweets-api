@@ -1,5 +1,5 @@
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy import inspect, ForeignKey
+from sqlalchemy import inspect, relationship, ForeignKey
 from datetime import datetime
 
 db = SQLAlchemy()
@@ -52,9 +52,11 @@ class BaseModel(object):
 
 class Status(db.Model, BaseModel):
     __tablename__ = 'status'
-    status_id = db.Column(db.Integer, primary_key=True)
+    status_id = db.Column(db.String(36), primary_key=True)
     text = db.Column(db.String(255))
     created_at = db.Column(db.DateTime)
+
+    status_tags = relationship("StatusTag", back_populates="status")
 
     def __init__(self, status_id=None, text=None, created_at=None):
         self.status_id = status_id
@@ -66,3 +68,22 @@ class Status(db.Model, BaseModel):
         dict = BaseModel.as_dict(self)
         dict['created_at'] = int((self.created_at - epoch).total_seconds() * 1000.0)  # millis since 1970
         return dict
+
+
+class Tag(db.Model, BaseModel):
+    __tablename__ = 'tag'
+    tag_id = db.Column(db.Integer, primary_key=True)
+    tag = db.Column(db.String(25))
+
+    def __init__(self, tag_id=None, tag=None):
+        self.tag_id = tag_id
+        self.tag = tag
+
+
+class StatusTag(db.Model, BaseModel):
+    __tablename__ = 'status_tag'
+    status_tag_id = db.Column(db.Integer, primary_key=True)
+    status_id = db.Column(db.String(36), ForeignKey(Status.status_id))
+    tag_id = db.Column(db.Integer, ForeignKey(Tag.tag_id))
+
+    status = relationship("Status", back_populates="status_tags")

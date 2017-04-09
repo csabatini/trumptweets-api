@@ -4,7 +4,7 @@ from datetime import datetime
 from ConfigParser import ConfigParser
 from os.path import join, expanduser
 
-from models import db, Status
+from models import db, Status, Tag
 
 cnf = join(expanduser('~'), '.my.cnf')
 cnf_parser = ConfigParser()
@@ -23,10 +23,15 @@ def index():
     return "Trump Tweets Web Service"
 
 
-@app.route('/api/v1/statuses', methods=['GET'])
+@app.route('/api/v1/status', methods=['GET'])
 def statuses():
     return jsonify([x.as_dict() for x in
                     Status.query.order_by(desc(Status.created_at)).all()])
+
+
+@app.route('/api/v1/tag', methods=['GET'])
+def statuses():
+    return jsonify([x.as_dict() for x in Tag.query.all()])
 
 
 if __name__ == '__main__':
