@@ -35,3 +35,13 @@ CREATE TABLE tag (
     tag varchar(25) NOT NULL,
     PRIMARY KEY (tag_id)
 ) DEFAULT CHARSET=utf8;
+
+CREATE TABLE status_tag (
+    status_tag_id int NOT NULL AUTO_INCREMENT,
+    status_id varchar(36) NOT NULL,
+    tag_id int NOT NULL,
+    PRIMARY KEY (status_tag_id),
+    UNIQUE KEY ix_status_tag (status_id, tag_id),
+    FOREIGN KEY (status_id) REFERENCES status(status_id),
+    FOREIGN KEY (tag_id) REFERENCES tag(tag_id)
+) DEFAULT CHARSET=utf8;
