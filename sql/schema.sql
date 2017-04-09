@@ -13,6 +13,7 @@ CREATE TABLE quote_word (
 
 CREATE TABLE status (
      status_id TEXT NOT NULL PRIMARY KEY,
+     tags TEXT NOT NULL
      UNIQUE(status_id)
 );
 
