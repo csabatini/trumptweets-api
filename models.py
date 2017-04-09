@@ -65,8 +65,9 @@ class Status(db.Model, BaseModel):
 
     def as_dict(self):
         epoch = datetime.utcfromtimestamp(0)
-        dict = BaseModel.as_dict(self)
-        dict['created_at'] = int((self.created_at - epoch).total_seconds() * 1000.0)  # millis since 1970
+        dict = dict()
+        dict['status'] = BaseModel.as_dict(self)
+        dict['status']['created_at'] = int((self.created_at - epoch).total_seconds() * 1000.0)
         dict['tags'] = [x.as_dict() for x in self.tags]
         return dict
 
@@ -82,7 +83,7 @@ class Tag(db.Model, BaseModel):
 
     def as_dict(self):
         dict = BaseModel.as_dict(self)
-        # del dict['t']
+        del dict['tag']
         return dict
 
 
