@@ -1,5 +1,5 @@
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy import inspect, relationship, ForeignKey
+from sqlalchemy import inspect, ForeignKey
 from datetime import datetime
 
 db = SQLAlchemy()
@@ -56,7 +56,7 @@ class Status(db.Model, BaseModel):
     text = db.Column(db.String(255))
     created_at = db.Column(db.DateTime)
 
-    status_tags = relationship("StatusTag", back_populates="status")
+    status_tags = db.relationship("StatusTag", back_populates="status")
 
     def __init__(self, status_id=None, text=None, created_at=None):
         self.status_id = status_id
@@ -86,4 +86,4 @@ class StatusTag(db.Model, BaseModel):
     status_id = db.Column(db.String(36), ForeignKey(Status.status_id))
     tag_id = db.Column(db.Integer, ForeignKey(Tag.tag_id))
 
-    status = relationship("Status", back_populates="status_tags")
+    status = db.relationship("Status", back_populates="status_tags")
