@@ -25,7 +25,8 @@ def index():
 
 @app.route('/api/v1/statuses', methods=['GET'])
 def statuses():
-    return jsonify([x.as_dict() for x in Status.query.all()])
+    return jsonify([x.as_dict() for x in
+                    Status.query.order_by(desc(Status.created_at)).all()])
 
 
 if __name__ == '__main__':
