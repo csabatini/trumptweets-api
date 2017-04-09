@@ -24,13 +24,13 @@ def index():
 
 
 @app.route('/api/v1/status', methods=['GET'])
-def statuses():
+def status():
     return jsonify([x.as_dict() for x in
                     Status.query.order_by(desc(Status.created_at)).all()])
 
 
 @app.route('/api/v1/tag', methods=['GET'])
-def statuses():
+def tag():
     return jsonify([x.as_dict() for x in Tag.query.all()])
 
 
