@@ -29,3 +29,9 @@ CREATE TABLE status (
     created_at timestamp NOT NULL,
     PRIMARY KEY (status_id)
 ) DEFAULT CHARSET=utf8;
+
+CREATE TABLE tag (
+    tag_id int NOT NULL AUTO_INCREMENT,
+    tag varchar(25) NOT NULL,
+    PRIMARY KEY (tag_id)
+) DEFAULT CHARSET=utf8;
