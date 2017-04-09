@@ -56,7 +56,7 @@ class Status(db.Model, BaseModel):
     text = db.Column(db.String(255))
     created_at = db.Column(db.DateTime)
 
-    status_tags = db.relationship("StatusTag", back_populates="status")
+    tags = db.relationship("StatusTag", backref="status")
 
     def __init__(self, status_id=None, text=None, created_at=None):
         self.status_id = status_id
@@ -67,7 +67,7 @@ class Status(db.Model, BaseModel):
         epoch = datetime.utcfromtimestamp(0)
         dict = BaseModel.as_dict(self)
         dict['created_at'] = int((self.created_at - epoch).total_seconds() * 1000.0)  # millis since 1970
-        dict['tags'] = self.status_tags.as_dict()
+        dict['tags'] = [x.as_dict() for x in self.tags]
         return dict
 
 
@@ -93,7 +93,6 @@ class StatusTag(db.Model, BaseModel):
     tag_id = db.Column(db.Integer, ForeignKey(Tag.tag_id))
 
     tag = db.relationship('Tag', foreign_keys='StatusTag.tag_id', lazy='joined')
-    status = db.relationship("Status", back_populates="status_tags")
 
     def as_dict(self):
-        self.tag.as_dict()
+        return self.tag.as_dict()
