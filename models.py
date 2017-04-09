@@ -65,7 +65,7 @@ class Status(db.Model, BaseModel):
 
     def as_dict(self):
         epoch = datetime.utcfromtimestamp(0)
-        dict = dict()
+        dict = {}
         dict['status'] = BaseModel.as_dict(self)
         dict['status']['created_at'] = int((self.created_at - epoch).total_seconds() * 1000.0)
         dict['tags'] = [x.as_dict() for x in self.tags]
