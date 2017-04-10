@@ -40,6 +40,12 @@ CREATE TABLE status_tag (
      UNIQUE(status_id, tag_id)
 );
 
+CREATE TABLE favorite (
+     status_id TEXT NOT NULL,
+     FOREIGN KEY (status_id) REFERENCES status(status_id),
+     UNIQUE(status_id)
+);
+
 -- trumptweets mysql
 CREATE DATABASE trumptweets CHARACTER SET utf8 COLLATE utf8_general_ci;
 
