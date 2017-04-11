@@ -49,6 +49,13 @@ CREATE TABLE favorite (
 -- trumptweets mysql
 CREATE DATABASE trumptweets CHARACTER SET utf8 COLLATE utf8_general_ci;
 
+-- temporary
+CREATE TABLE status_word (
+    status_word_id int NOT NULL AUTO_INCREMENT,
+    word varchar(20) NOT NULL,
+    PRIMARY KEY (status_word_id )
+) DEFAULT CHARSET=utf8;
+
 CREATE TABLE status (
     status_id varchar(36) NOT NULL,
     text varchar(255) NOT NULL,
