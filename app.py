@@ -1,19 +1,19 @@
 from flask import Flask, request, abort, jsonify
 from sqlalchemy import asc, desc
-from datetime import datetime
 from ConfigParser import ConfigParser
 from os.path import join, expanduser
+import hashlib
 
-from models import db, Status, Tag
+from models import db, Status, UserProfile, Tag
 
 cnf = join(expanduser('~'), '.my.cnf')
 cnf_parser = ConfigParser()
 cnf_parser.read(cnf)
-user = cnf_parser.get('client', 'user')
+username = cnf_parser.get('client', 'user')
 password = cnf_parser.get('client', 'password')
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://%s:%s@localhost/trumptweets' % (user, password)
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://%s:%s@localhost/trumptweets' % (username, password)
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = 'False'
 db.init_app(app)
 
@@ -32,6 +32,23 @@ def status():
 @app.route('/api/v1/tag', methods=['GET'])
 def tag():
     return jsonify([x.as_dict() for x in Tag.query.all()])
+
+
+@app.route('/api/v1/user', methods=['POST'])
+def user_profile():
+    payload = request.get_json()
+
+    if payload['guid'] == 'NONE':
+        user = UserProfile(hashlib.sha256().hexdigest(), payload['device_token'])
+        db.session.add(user)
+        db.session.commit(user)
+    else:
+        user = UserProfile.query.filter_by(guid=payload['guid']).first()
+        token = payload['device_token']
+        if token is not None and token != user.device_token:
+            user.device_token = token
+            db.session.commit(user)
+    return jsonify(user.as_dict())
 
 
 if __name__ == '__main__':
