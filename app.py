@@ -2,7 +2,7 @@ from flask import Flask, request, abort, jsonify
 from sqlalchemy import asc, desc
 from ConfigParser import ConfigParser
 from os.path import join, expanduser
-import hashlib
+import uuid
 
 from models import db, Status, UserProfile, Tag
 
@@ -39,7 +39,7 @@ def user_profile():
     payload = request.get_json()
 
     if payload['guid'] == 'NONE':
-        user = UserProfile(hashlib.sha256().hexdigest(), payload['device_token'])
+        user = UserProfile(uuid.uuid4(), payload['device_token'])
         db.session.add(user)
         db.session.commit()
     else:

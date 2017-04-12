@@ -13,7 +13,7 @@ class BaseModel(object):
 
 class UserProfile(db.Model, BaseModel):
     __tablename__ = 'user_profile'
-    guid = db.Column(db.String(64), primary_key=True)
+    guid = db.Column(db.String(36), primary_key=True)
     device_token = db.Column(db.String(200))
     created_time = db.Column(db.DateTime)
 
