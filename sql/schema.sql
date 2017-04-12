@@ -18,6 +18,12 @@ CREATE TABLE status (
 );
 
 -- trumptweets.db
+CREATE TABLE user_profile (
+     guid TEXT NOT NULL PRIMARY KEY,
+     device_token TEXT NULL,
+     UNIQUE(guid)
+);
+
 CREATE TABLE status (
      status_id TEXT NOT NULL PRIMARY KEY,
      text TEXT NOT NULL,

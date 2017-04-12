@@ -41,13 +41,13 @@ def user_profile():
     if payload['guid'] == 'NONE':
         user = UserProfile(hashlib.sha256().hexdigest(), payload['device_token'])
         db.session.add(user)
-        db.session.commit(user)
+        db.session.commit()
     else:
         user = UserProfile.query.filter_by(guid=payload['guid']).first()
         token = payload['device_token']
         if token is not None and token != user.device_token:
             user.device_token = token
-            db.session.commit(user)
+            db.session.commit()
     return jsonify(user.as_dict())
 
 
