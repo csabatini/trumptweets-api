@@ -29,7 +29,7 @@ def status():
     if request.args is None or 'max_created_at' not in request.args:
         filter_date = datetime.utcnow() - timedelta(days=1)
     else:
-        filter_date = datetime.fromtimestamp(long(request.args.get['max_created_at'])/1000.0)
+        filter_date = datetime.fromtimestamp(long(request.args['max_created_at'])/1000.0)
     return jsonify([x.as_dict() for x in
                     Status.query
                    .filter(Status.created_at >= filter_date)
