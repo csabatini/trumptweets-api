@@ -34,21 +34,24 @@ def tag():
     return jsonify([x.as_dict() for x in Tag.query.all()])
 
 
-@app.route('/api/v1/user', methods=['POST'])
+@app.route('/api/v1/user', methods=['GET', 'POST'])
 def user_profile():
-    payload = request.get_json()
-
-    if payload['guid'] is None:
-        user = UserProfile(uuid.uuid4(), payload['device_token'])
-        db.session.add(user)
-        db.session.commit()
+    if request.method == 'GET':
+        return jsonify([x.as_dict() for x in UserProfile.query.all()])
     else:
-        user = UserProfile.query.filter_by(guid=payload['guid']).first()
-        token = payload['device_token']
-        if token is not None and token != user.device_token:
-            user.device_token = token
+        payload = request.get_json()
+
+        if payload['guid'] is None:
+            user = UserProfile(uuid.uuid4(), payload['device_token'])
+            db.session.add(user)
             db.session.commit()
-    return jsonify(user.as_dict())
+        else:
+            user = UserProfile.query.filter_by(guid=payload['guid']).first()
+            token = payload['device_token']
+            if token is not None and token != user.device_token:
+                user.device_token = token
+                db.session.commit()
+        return jsonify(user.as_dict())
 
 
 if __name__ == '__main__':

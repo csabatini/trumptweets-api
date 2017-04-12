@@ -19,10 +19,12 @@ CREATE TABLE status (
 
 -- trumptweets.db
 CREATE TABLE user_profile (
-     guid TEXT NOT NULL PRIMARY KEY,
+     guid TEXT NULL,
+     push_enabled INTEGER NOT NULL,
      device_token TEXT NULL,
      UNIQUE(guid)
 );
+--INSERT INTO user_profile (push_enabled) VALUES (1);
 
 CREATE TABLE status (
      status_id TEXT NOT NULL PRIMARY KEY,
@@ -57,6 +59,7 @@ CREATE DATABASE trumptweets CHARACTER SET utf8 COLLATE utf8_general_ci;
 
 CREATE TABLE user_profile (
     guid varchar(36) NOT NULL,
+    push_enabled boolean NOT NULL,
     device_token varchar(200) NULL,
     created_time timestamp DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (guid)
