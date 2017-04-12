@@ -32,7 +32,7 @@ def status():
         yesterday if payload is None or 'max_created_at' not in payload else payload['max_created_at']
     return jsonify([x.as_dict() for x in
                     Status.query
-                   .filter_by(Status.created_at >= filter_date)
+                   .filter(Status.created_at >= filter_date)
                    .order_by(desc(Status.created_at)).all()])
 
 
