@@ -27,8 +27,9 @@ def index():
 @app.route('/api/v1/status', methods=['GET'])
 def status():
     payload = request.get_json()
+    yesterday = datetime.utcnow() - timedelta(days=1)
     filter_date = \
-        datetime.utcnow() - timedelta(days=1) if 'max_created_at' not in payload else payload['max_created_at']
+        yesterday if payload is None or 'max_created_at' not in payload else payload['max_created_at']
     return jsonify([x.as_dict() for x in
                     Status.query
                    .filter_by(Status.created_at >= filter_date)
