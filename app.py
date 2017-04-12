@@ -26,14 +26,15 @@ def index():
 
 @app.route('/api/v1/status', methods=['GET'])
 def status():
-    payload = request.get_json()
-    yesterday = datetime.utcnow() - timedelta(days=1)
-    filter_date = \
-        yesterday if payload is None or 'max_created_at' not in payload else payload['max_created_at']
+    if request.args is None or 'max_created_at' not in request.args:
+        filter_date = datetime.utcnow() - timedelta(days=1)
+    else:
+        filter_date = datetime.fromtimestamp(long(request.args.get['max_created_at'])/1000.0)
     return jsonify([x.as_dict() for x in
                     Status.query
                    .filter(Status.created_at >= filter_date)
-                   .order_by(desc(Status.created_at)).all()])
+                   .order_by(desc(Status.created_at))
+                   .all()])
 
 
 @app.route('/api/v1/tag', methods=['GET'])
