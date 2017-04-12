@@ -2,6 +2,7 @@ from flask import Flask, request, abort, jsonify
 from sqlalchemy import asc, desc
 from ConfigParser import ConfigParser
 from os.path import join, expanduser
+from datetime import datetime, timedelta
 import uuid
 
 from models import db, Status, UserProfile, Tag
@@ -25,8 +26,13 @@ def index():
 
 @app.route('/api/v1/status', methods=['GET'])
 def status():
+    payload = request.get_json()
+    filter_date = \
+        datetime.utcnow() - timedelta(days=1) if 'max_created_at' not in payload else payload['max_created_at']
     return jsonify([x.as_dict() for x in
-                    Status.query.order_by(desc(Status.created_at)).all()])
+                    Status.query
+                   .filter_by(Status.created_at >= filter_date)
+                   .order_by(desc(Status.created_at)).all()])
 
 
 @app.route('/api/v1/tag', methods=['GET'])
@@ -36,23 +42,20 @@ def tag():
 
 @app.route('/api/v1/user', methods=['GET', 'POST'])
 def user_profile():
-    if request.method == 'GET':
-        return jsonify([x.as_dict() for x in UserProfile.query.all()])
-    else:
-        payload = request.get_json()
+    payload = request.get_json()
 
-        if payload['guid'] is None:
-            user = \
-                UserProfile(uuid.uuid4(), payload['push_enabled'], payload['device_token'])
-            db.session.add(user)
+    if payload['guid'] is None:
+        user = \
+            UserProfile(uuid.uuid4(), payload['push_enabled'], payload['device_token'])
+        db.session.add(user)
+        db.session.commit()
+    else:
+        user = UserProfile.query.filter_by(guid=payload['guid']).first()
+        token = payload['device_token']
+        if token is not None and token != user.device_token:
+            user.device_token = token
             db.session.commit()
-        else:
-            user = UserProfile.query.filter_by(guid=payload['guid']).first()
-            token = payload['device_token']
-            if token is not None and token != user.device_token:
-                user.device_token = token
-                db.session.commit()
-        return jsonify(user.as_dict())
+    return jsonify(user.as_dict())
 
 
 if __name__ == '__main__':
