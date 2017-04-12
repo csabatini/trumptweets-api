@@ -42,7 +42,8 @@ def user_profile():
         payload = request.get_json()
 
         if payload['guid'] is None:
-            user = UserProfile(uuid.uuid4(), payload['device_token'])
+            user = \
+                UserProfile(uuid.uuid4(), payload['push_enabled'], payload['device_token'])
             db.session.add(user)
             db.session.commit()
         else:
