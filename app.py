@@ -60,5 +60,20 @@ def user_profile():
     return jsonify(user.as_dict())
 
 
+@app.route('/api/v1/datasync', methods=['POST'])
+def datasync():
+    payload = request.get_json()
+    if payload['user_profile']['guid'] is None:
+        abort(400)
+
+    user = UserProfile.query.filter_by(guid=payload['user_profile']['guid']).first()
+    new_max_created_at = datetime.fromtimestamp(long(payload['max_created_at'])/1000.0)
+
+    if user.status_max_created_at is None or new_max_created_at > user.status_max_created_at:
+        user.status_max_created_at = new_max_created_at
+        db.session.commit()
+
+    return 'OK'
+
 if __name__ == '__main__':
     app.run(host="0.0.0.0")
