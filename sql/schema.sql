@@ -13,7 +13,13 @@ CREATE TABLE quote_word (
 
 CREATE TABLE status (
      status_id TEXT NOT NULL PRIMARY KEY,
-     tags TEXT NOT NULL
+     tags TEXT NOT NULL,
+     UNIQUE(status_id)
+);
+
+CREATE TABLE status_v2 (
+     status_id TEXT NOT NULL PRIMARY KEY,
+     tags TEXT NULL,
      UNIQUE(status_id)
 );
 
@@ -35,7 +41,7 @@ CREATE TABLE status (
 );
 
 CREATE TABLE tag (
-     tag_id INTEGER NOT NULL PRIMARY KEY,
+     tag_id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
      tag TEXT NOT NULL,
      UNIQUE(tag_id)
 );
