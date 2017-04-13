@@ -48,7 +48,7 @@ def user_profile():
 
     if payload['guid'] is None:
         user = \
-            UserProfile(uuid.uuid4(), payload['push_enabled'], payload['device_token'], datetime.fromtimestamp(0))
+            UserProfile(uuid.uuid4(), payload['push_enabled'], payload['device_token'])
         db.session.add(user)
     else:
         user = UserProfile.query.filter_by(guid=payload['guid']).first()
@@ -65,6 +65,8 @@ def offset():
     payload = request.get_json()
     if payload['user_profile']['guid'] is None:
         abort(400)
+    elif payload['max_created_at'] == 0:
+        return 'OK'
 
     user = UserProfile.query.filter_by(guid=payload['user_profile']['guid']).first()
     new_max_created_at = datetime.fromtimestamp(long(payload['max_created_at']) / 1000.0)
