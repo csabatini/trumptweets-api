@@ -33,13 +33,15 @@ class Status(db.Model, BaseModel):
     __tablename__ = 'status'
     status_id = db.Column(db.String(36), primary_key=True)
     text = db.Column(db.String(255))
+    media_url = db.Column(db.String(100))
     created_at = db.Column(db.DateTime)
 
     tags = db.relationship("StatusTag", backref="status")
 
-    def __init__(self, status_id=None, text=None, created_at=None):
+    def __init__(self, status_id=None, text=None, media_url=None, created_at=None):
         self.status_id = status_id
         self.text = text
+        self.media_url = media_url
         self.created_at = created_at
 
     def as_dict(self):
