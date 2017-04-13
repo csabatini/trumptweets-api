@@ -71,7 +71,7 @@ def offset():
     user = UserProfile.query.filter_by(guid=payload['user_profile']['guid']).first()
     new_max_created_at = datetime.fromtimestamp(long(payload['max_created_at']) / 1000.0)
 
-    if new_max_created_at > user.status_max_created_at:
+    if user.status_max_created_at is None or new_max_created_at > user.status_max_created_at:
         user.status_max_created_at = new_max_created_at
         db.session.commit()
 
