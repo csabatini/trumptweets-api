@@ -17,7 +17,7 @@ class UserProfile(db.Model, BaseModel):
     push_enabled = db.Column(db.Boolean)
     device_token = db.Column(db.String(200))
     created_time = db.Column(db.DateTime)
-    status_max_created_at = db.Column(db.DateTime, nullable=True)
+    status_max_created_at = db.Column(db.DateTime)
 
     def __init__(self, guid=None, push_enabled=None, device_token=None, status_max_created_at=None):
         self.guid = guid
