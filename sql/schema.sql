@@ -88,6 +88,14 @@ CREATE TABLE tag (
     PRIMARY KEY (tag_id)
 ) DEFAULT CHARSET=utf8;
 
+CREATE TABLE tag_alias (
+    tag_alias_id int NOT NULL AUTO_INCREMENT,
+    tag_id int NOT NULL,
+    tag_alias varchar(25) NOT NULL,
+    PRIMARY KEY (tag_alias_id),
+    FOREIGN KEY (tag_id) REFERENCES tag(tag_id)
+) DEFAULT CHARSET=utf8;
+
 CREATE TABLE status_tag (
     status_tag_id int NOT NULL AUTO_INCREMENT,
     status_id varchar(36) NOT NULL,
