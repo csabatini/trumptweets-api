@@ -54,14 +54,15 @@ def user_profile():
     else:
         user = UserProfile.query.filter_by(guid=payload['guid']).first()
         token = payload['device_token']
-        if token is not None and token != user.device_token:
+        if token is not None:
             user.device_token = token
-            db.session.commit()
+        user.push_enabled = payload['push_enabled']
+        db.session.commit()
     return jsonify(user.as_dict())
 
 
-@app.route('/api/v1/datasync', methods=['POST'])
-def datasync():
+@app.route('/api/v1/offset', methods=['POST'])
+def offset():
     payload = request.get_json()
     if payload['user_profile']['guid'] is None:
         abort(400)
