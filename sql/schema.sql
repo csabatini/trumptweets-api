@@ -29,6 +29,7 @@ CREATE TABLE user_profile (
 CREATE TABLE status (
      status_id TEXT NOT NULL PRIMARY KEY,
      text TEXT NOT NULL,
+     media_url TEXT NULL,
      created_at INTEGER NOT NULL,
      UNIQUE(status_id)
 );
