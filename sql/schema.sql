@@ -97,3 +97,14 @@ CREATE TABLE status_tag (
     FOREIGN KEY (status_id) REFERENCES status(status_id),
     FOREIGN KEY (tag_id) REFERENCES tag(tag_id)
 ) DEFAULT CHARSET=utf8;
+
+CREATE TABLE user_notification (
+    user_notification_id bigint NOT NULL AUTO_INCREMENT,
+    user_guid varchar(36) NOT NULL,
+    message varchar(100) NOT NULL,
+    created_time timestamp DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (user_notification_id),
+    FOREIGN KEY (user_guid) REFERENCES user_profile(guid)
+);
+
+ALTER TABLE user_notification ADD INDEX ix_user_notification_time (user_guid, created_time);
