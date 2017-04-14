@@ -9,7 +9,7 @@ function run_export_query() {
     if [[ -f $OUTFILE ]]; then
         sudo rm $OUTFILE
     fi
-    mysql --defaults-extra-file=$HOME/.my.cnf --database babynames < $QUERY
+    mysql --defaults-extra-file=$HOME/.my.cnf --database trumptweets < $QUERY
     mkdir -p $HOME/mysql/export/$TABLE/
     cp $OUTFILE $HOME/mysql/export/$TABLE/table.csv
     gzip -f $HOME/mysql/export/$TABLE/table.csv
