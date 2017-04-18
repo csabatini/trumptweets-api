@@ -80,7 +80,7 @@ class StatusTag(db.Model, BaseModel):
 
 class TagCountMaxCreated(db.Model, BaseModel):
     __tablename__ = 'vw_tag_count_max_created'
-    tag_id = db.Column(db.Integer)
+    tag_id = db.Column(db.Integer, primary_key=True)
     tag = db.Column(db.String(25))
     max_created_at = db.Column(db.DateTime)
     count = db.Column(db.Integer)

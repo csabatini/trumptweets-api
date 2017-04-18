@@ -39,7 +39,14 @@ def status():
 
 @app.route('/api/v1/tag', methods=['GET'])
 def tag():
-    return jsonify([x.as_dict() for x in TagCountMaxCreated.query.all()])
+    if request.args is None or 'id' not in request.args:
+        return jsonify([x.as_dict() for x in TagCountMaxCreated.query.all()])
+    else:
+        # TODO: 400 on invalid id format
+        return jsonify([x.as_dict() for x in
+                        TagCountMaxCreated.query
+                       .filter_by(tag_id=request.args['id'])
+                       .all()])
 
 
 @app.route('/api/v1/user', methods=['POST'])
