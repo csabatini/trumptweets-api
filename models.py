@@ -76,3 +76,11 @@ class StatusTag(db.Model, BaseModel):
 
     def as_dict(self):
         return self.tag.as_dict()
+
+
+class TagCountMaxCreated(db.Model, BaseModel):
+    __tablename__ = 'vw_tag_count_max_created'
+    tag_id = db.Column(db.Integer)
+    tag = db.Column(db.String(25))
+    max_created_at = db.Column(db.DateTime)
+    count = db.Column(db.Integer)

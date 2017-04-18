@@ -5,7 +5,7 @@ from os.path import join, expanduser
 from datetime import datetime, timedelta
 import uuid
 
-from models import db, Status, UserProfile, Tag
+from models import db, Status, UserProfile, Tag, TagCountMaxCreated
 
 cnf = join(expanduser('~'), '.my.cnf')
 cnf_parser = ConfigParser()
@@ -39,7 +39,7 @@ def status():
 
 @app.route('/api/v1/tag', methods=['GET'])
 def tag():
-    return jsonify([x.as_dict() for x in Tag.query.all()])
+    return jsonify([x.as_dict() for x in TagCountMaxCreated.query.all()])
 
 
 @app.route('/api/v1/user', methods=['POST'])
