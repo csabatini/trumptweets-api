@@ -122,3 +122,13 @@ CREATE TABLE user_notification (
 );
 
 ALTER TABLE user_notification ADD INDEX ix_user_notification_time (user_guid, created_time);
+
+CREATE VIEW vw_tag_count_max_created AS
+(
+    SELECT tag.*, count(*) as count, MAX(status.created_at) max_created_at
+    FROM tag INNER JOIN status_tag
+    ON tag.tag_id = status_tag.tag_id INNER JOIN status
+    ON status_tag.status_id = status.status_id
+    GROUP BY tag.tag_id, tag.tag
+    ORDER BY 4 DESC
+);
