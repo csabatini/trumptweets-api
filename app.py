@@ -42,11 +42,10 @@ def tag():
     if request.args is None or 'id' not in request.args:
         return jsonify([x.as_dict() for x in TagCountMaxCreated.query.all()])
     else:
-        # TODO: 400 on invalid id format
-        return jsonify([x.as_dict() for x in
-                        TagCountMaxCreated.query
-                       .filter_by(tag_id=request.args['id'])
-                       .all()])
+        return jsonify(TagCountMaxCreated.query
+                       .filter_by(tag_id=request.args['id'])  # TODO: 400 on invalid id type
+                       .first()
+                       .as_dict())
 
 
 @app.route('/api/v1/user', methods=['POST'])
