@@ -33,13 +33,13 @@ def status():
             filter_date = datetime.fromtimestamp(long(request.args['max_created_at']) / 1000.0)
         if 'tag_id' in request.args:
             filter_date = datetime.fromtimestamp(0)
-            results = db.session.query(Status) \
-                .join(StatusTag, Status.status_id == StatusTag.status_id) \
+            results = results.join(StatusTag, Status.status_id == StatusTag.status_id) \
                 .filter(StatusTag.tag_id == request.args['tag_id'])
     return jsonify([x.as_dict() for x in
                     results
                    .filter(Status.created_at > filter_date)
                    .order_by(desc(Status.created_at))
+                   .limit(100)
                    .all()])
 
 
