@@ -5,7 +5,7 @@ from os.path import join, expanduser
 from datetime import datetime, timedelta
 import uuid
 
-from models import db, Status, UserProfile, Tag, TagCountMaxCreated
+from models import db, Status, UserProfile, StatusTag, TagCountMaxCreated
 
 cnf = join(expanduser('~'), '.my.cnf')
 cnf_parser = ConfigParser()
@@ -26,12 +26,18 @@ def index():
 
 @app.route('/api/v1/status', methods=['GET'])
 def status():
-    if request.args is None or 'max_created_at' not in request.args:
-        filter_date = datetime.utcnow() - timedelta(days=1)
-    else:
-        filter_date = datetime.fromtimestamp(long(request.args['max_created_at']) / 1000.0)
+    results = Status.query
+    filter_date = datetime.utcnow() - timedelta(days=1)
+    if request.args is not None:
+        if 'max_created_at' in request.args:
+            filter_date = datetime.fromtimestamp(long(request.args['max_created_at']) / 1000.0)
+        if 'tag_id' in request.args:
+            filter_date = datetime.fromtimestamp(0)
+            results = db.session.query(Status) \
+                .join(StatusTag, Status.status_id == StatusTag.status_id) \
+                .filter(StatusTag.tag_id == request.args['tag_id'])
     return jsonify([x.as_dict() for x in
-                    Status.query
+                    results
                    .filter(Status.created_at > filter_date)
                    .order_by(desc(Status.created_at))
                    .all()])
