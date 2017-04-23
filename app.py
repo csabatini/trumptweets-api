@@ -7,7 +7,16 @@ import uuid
 
 from models import db, Status, UserProfile, StatusTag, TagCountMaxCreated
 
+cnf = join(expanduser('~'), '.my.cnf')
+cnf_parser = ConfigParser()
+cnf_parser.read(cnf)
+username = cnf_parser.get('client', 'user')
+password = cnf_parser.get('client', 'password')
+
 app = Flask(__name__)
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://%s:%s@localhost/trumptweets' % (username, password)
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = 'False'
+db.init_app(app)
 
 
 @app.route("/", methods=['GET'])
@@ -82,13 +91,4 @@ def offset():
 
 
 if __name__ == '__main__':
-    cnf = join(expanduser('~'), '.my.cnf')
-    cnf_parser = ConfigParser()
-    cnf_parser.read(cnf)
-    username = cnf_parser.get('client', 'user')
-    password = cnf_parser.get('client', 'password')
-
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://%s:%s@localhost/trumptweets' % (username, password)
-    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = 'False'
-    db.init_app(app)
     app.run(host="0.0.0.0")
