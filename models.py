@@ -48,10 +48,9 @@ class Status(db.Model, BaseModel):
         self.created_at = created_at
 
     def as_dict(self):
-        epoch = datetime.utcfromtimestamp(0)
         dict = {}
         dict['status'] = BaseModel.as_dict(self)
-        dict['status']['created_at'] = int((self.created_at - epoch).total_seconds() * 1000.0)
+        dict['status']['created_at'] = get_unixtime(self.created_at)
         dict['tags'] = [x.as_dict() for x in self.tags]
         return dict
 
@@ -84,3 +83,13 @@ class TagCountMaxCreated(db.Model, BaseModel):
     tag = db.Column(db.String(25))
     max_created_at = db.Column(db.DateTime)
     count = db.Column(db.Integer)
+
+    def as_dict(self):
+        dict = BaseModel.as_dict(self)
+        dict['max_created_at'] = get_unixtime(self.max_created_at)
+        return dict
+
+
+def get_unixtime(timestamp):
+    epoch = datetime.utcfromtimestamp(0)
+    return int((timestamp - epoch).total_seconds() * 1000.0)
