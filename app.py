@@ -49,8 +49,8 @@ def tag():
         return jsonify([x.as_dict() for x in TagCountMaxCreated.query.all()])
     else:
         return jsonify(TagCountMaxCreated.query
-                       .filter_by(tag_id=request.args['id'])  # TODO: 400 on invalid id type
-                       .first()
+                       .filter_by(tag_id=request.args['id'])
+                       .first_or_404()
                        .as_dict())
 
 
