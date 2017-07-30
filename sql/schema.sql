@@ -125,7 +125,7 @@ ALTER TABLE user_notification ADD INDEX ix_user_notification_time (user_guid, cr
 
 CREATE VIEW vw_tag_count_max_created AS
 (
-    SELECT tag.*, count(*) as count, MAX(status.created_at) max_created_at
+    SELECT tag.*, CASE WHEN count(*) < 100 THEN count(*) ELSE 100 END AS count, MAX(status.created_at) max_created_at
     FROM tag INNER JOIN status_tag
     ON tag.tag_id = status_tag.tag_id INNER JOIN status
     ON status_tag.status_id = status.status_id
