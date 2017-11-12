@@ -82,7 +82,7 @@ CREATE TABLE status_word (
 
 CREATE TABLE status (
     status_id varchar(36) NOT NULL,
-    text varchar(255) NOT NULL,
+    text varchar(500) NOT NULL,
     media_url varchar(100) NULL,
     created_at timestamp NOT NULL,
     PRIMARY KEY (status_id)
