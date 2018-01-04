@@ -1,67 +1,3 @@
--- trumpwip.db
-
-CREATE TABLE seed_quote (
-     quote_id TEXT NOT NULL PRIMARY KEY,
-     value TEXT NOT NULL,
-     UNIQUE(quote_id)
-);
-
-CREATE TABLE quote_word (
-     word TEXT NOT NULL PRIMARY KEY,
-     UNIQUE(word)
-);
-
-CREATE TABLE status (
-     status_id TEXT NOT NULL PRIMARY KEY,
-     tags TEXT NOT NULL,
-     UNIQUE(status_id)
-);
-
-CREATE TABLE status_v2 (
-     status_id TEXT NOT NULL PRIMARY KEY,
-     tags TEXT NULL,
-     UNIQUE(status_id)
-);
-
--- trumptweets.db
-CREATE TABLE user_profile (
-     guid TEXT NULL,
-     push_enabled INTEGER NOT NULL,
-     device_token TEXT NULL,
-     UNIQUE(guid)
-);
---INSERT INTO user_profile (push_enabled) VALUES (1);
-
-CREATE TABLE status (
-     status_id TEXT NOT NULL PRIMARY KEY,
-     text TEXT NOT NULL,
-     media_url TEXT NULL,
-     created_at INTEGER NOT NULL,
-     UNIQUE(status_id)
-);
-
-CREATE TABLE tag (
-     tag_id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-     tag TEXT NOT NULL,
-     UNIQUE(tag_id)
-);
-
-CREATE TABLE status_tag (
-     status_tag_id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-     status_id TEXT NOT NULL,
-     tag_id INTEGER NOT NULL,
-     FOREIGN KEY (status_id) REFERENCES status(status_id),
-     FOREIGN KEY (tag_id) REFERENCES tag(tag_id),
-     UNIQUE(status_id, tag_id)
-);
-
-CREATE TABLE favorite (
-     status_id TEXT NOT NULL,
-     FOREIGN KEY (status_id) REFERENCES status(status_id),
-     UNIQUE(status_id)
-);
-
--- trumptweets mysql
 CREATE DATABASE trumptweets CHARACTER SET utf8 COLLATE utf8_general_ci;
 
 CREATE TABLE user_profile (
@@ -73,7 +9,6 @@ CREATE TABLE user_profile (
     PRIMARY KEY (guid)
 ) DEFAULT CHARSET=utf8;
 
--- temporary
 CREATE TABLE status_word (
     status_word_id int NOT NULL AUTO_INCREMENT,
     word varchar(20) NOT NULL,
