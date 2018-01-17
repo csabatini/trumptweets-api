@@ -61,3 +61,9 @@ Refreshing Data
 ---------------
 New tweets are constantly being created that should be added to the database - ``scripts/insert_latest_tweets.py`` can handle this for us. I recommend running it as a cron job.    
 
+Entity-relationship diagram
+---------------------------
+Here's the logical data model for the application:
+
+.. image:: https://sabatini.io/_downloads/trumptweets_erd.png
+
